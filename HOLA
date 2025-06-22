@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Estudiantes </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+      <h2 class="mb-4 text-primary">Formulario de Registro de Estudiantes</h2>
+
+      <form class="row g-3" id="formulario">
+        <div class="col-md-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="nombre">
+        </div>
+        <div class="col-md-3">
+          <label for="apellido" class="form-label">Apellido </label>
+          <input type="text" class="form-control" id="apellido">
+        </div>
+        <div class="col-md-3">
+          <label for="cedula" class="form-label">Cedula </label>
+          <input type="number" class="form-control" id="cedula">
+        </div>
+        <div class="col-md-3">
+          <label for="edad" class="form-label">Edad </label>
+          <input type="number" class="form-control" id="edad">
+        </div>
+
+        <div class="col-4">
+          <label class="visually-hidden" for="inlineFormSelectPref">Semestre</label>
+          <select class="form-select" id="semestre">
+            <option selected>Semestre</option>
+            <option value="Primero">Primero</option>
+            <option value="Segundo">Segundo</option>
+            <option value="Tercero">Tercero</option>
+            <option value="Cuarto">Cuarto</option>
+            <option value="Quinto">Quinto</option>
+            <option value="Sexto">Sexto</option>
+            <option value="Septimo">Septimo</option>
+            <option value="Octavo">Octavo</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label d-block">Modalidad</label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="modalidad" id="presencial" value="Presencial" required>
+            <label class="form-check-label" for="presencial">Presencial</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="modalidad" id="virtual" value="Virtual">
+            <label class="form-check-label" for="virtual">Virtual</label>
+          </div>
+        </div>
+        <div class="row">
+
+          <div class="col-md-2">
+            <label for="nota1" class="form-label">Nota 1</label>
+            <input type="number" id="nota1" class="form-control" min="0" max="10">
+          </div>
+          <div class="col-md-2">
+            <label for="nota2" class="form-label">Nota 2</label>
+            <input type="number" id="nota2" class="form-control" min="0" max="10">
+          </div>
+          <div class="col-md-2">
+            <label for="nota3" class="form-label">Nota 3</label>
+            <input type="number" id="nota3" class="form-control" min="0" max="10">
+          </div>
+          <div class="col-md-2">
+            <label for="nota4" class="form-label">Nota 4</label>
+            <input type="number" id="nota4" class="form-control" min="0" max="10">
+          </div>
+          <div class="col-md-2">
+            <label for="examen" class="form-label">Examen</label>
+            <input type="number" id="examen" class="form-control" min="0" max="60">
+          </div>
+
+        </div>
+
+        <div class="col-12">
+          <button type="button" class="btn btn-success" onclick="agregar()">Agregar Estudiante</button>
+        </div>
+
+      </form>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Cedula</th>
+            <th scope="col">edad</th>
+            <th scope="col">Semestre</th>
+            <th scope="col">Modalidad</th>
+            <th scope="col">Nota1</th>
+            <th scope="col">Nota2</th>
+            <th scope="col">Nota3</th>
+            <th scope="col">Nota4</th>
+            <th scope="col">Examen</th>
+          </tr>
+        </thead>
+        <tbody id="tablaEstudiantes"></tbody>
+      </table>
+
+      <script>
+        let estudiantes = [];
+
+        function agregar() {
+          let nombre = document.getElementById("nombre").value.trim();
+          let apellido = document.getElementById("apellido").value.trim();
+          let cedula = document.getElementById("cedula").value.trim();
+          let edad = parseInt(document.getElementById("edad").value.trim());
+          let semestre = document.getElementById("semestre").value;
+
+          let modalidad = document.querySelector('input[name="modalidad"]:checked');
+          if (!modalidad) {
+            alert("Selecciona una modalidad.");
+            return;
+
+          }
+           let nota1 = parseFloat (document.getElementById("nota1").value);
+            let nota2 = parseFloat (document.getElementById("nota2").value);
+            let nota3 = parseFloat (document.getElementById("nota3").value);
+            let nota4 = parseFloat (document.getElementById("nota4").value);
+            let examen = parseFloat (document.getElementById("examen").value);
+
+            if (nombre && apellido && cedula && edad && semestre){
+              estudiantes.push ({
+                nombre,
+                apellido,
+                cedula,
+                edad: parseInt (edad),
+                semestre,
+                modalidad: modalidad.value,
+                nota1,
+                nota2,
+                nota3,
+                nota4,
+                examen,
+              })
+              document.getElementById("formulario").reset();
+              mostrar()
+            }else {
+              alert ("complete los campos")
+            }
+        }
+
+        function mostrar(){
+          let tbody = document.getElementById("tablaEstudiantes");
+          tbody.innerHTML = ""
+          for (let i = 0; i < estudiantes.length; i++) {
+            const est = estudiantes[i];
+            let fila = 
+              "<tr>" +
+              "<td>" + (i+1) + "<td>" 
+              "<td>" + est.nombre + "<td>" 
+              "<td>" + est.apellido + "<td>" 
+                
+
+
+
+          
+              tbody.innerHTML += fila;
+
+            
+          }
+
+        }
+
+      </script>
+  </body>
+
+</html>
